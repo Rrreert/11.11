@@ -158,8 +158,8 @@ with st.sidebar:
 
 st.header('DeepSurv for predicting cancer-specific survival of Osteosarcoma',
           anchor='Cancer-specific survival of osteosarcoma')
-if st.session_state['patients']:
-    plot_below_header()
+# if st.session_state['patients']:
+#     plot_below_header()
 
 if st.sidebar.button("Predict", type="primary"):
     # test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
@@ -180,3 +180,4 @@ if st.sidebar.button("Predict", type="primary"):
         data
     )
     print('update patients ... ##########')
+    plot_below_header()

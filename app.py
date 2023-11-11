@@ -172,9 +172,9 @@ if st.sidebar.button("Predict", type="primary"):
         'times': [i for i in range(1, len(survival) + 1)],
         'No': len(st.session_state['patients']) + 1,
         'arg': {key: st.session_state[key] for key in input_keys},
-        '1-year': model_nmtlr.predict_survival(test_df, t=12)[0][0],
-        '3-year': model_nmtlr.predict_survival(test_df, t=36)[0][0],
-        '5-year': model_nmtlr.predict_survival(test_df, t=60)[0][0],
+        '1-year': model_nmtlr.predict_survival(test_df, t=12)[0],
+        '3-year': model_nmtlr.predict_survival(test_df, t=36)[0],
+        '5-year': model_nmtlr.predict_survival(test_df, t=60)[0],
     }
     st.session_state['patients'].append(
         data

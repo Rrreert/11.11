@@ -39,7 +39,7 @@ def get_select2():
 
 def plot_sur(pd_data):
     if st.session_state['display']:
-        fig = px.line(pd_data, x="Time", y="Survival", color='Patients', range_y=[0, 1])
+        fig = px.line(pd_data, x=pd_data.index, y="Survival", color='Patients', range_y=[0, 1])
     else:
         fig = px.line(pd_data.loc[pd_data['Patients'] == pd_data['Patients'].to_list()[-1], :], x="Time", y="Survival",
                       range_y=[0, 1])
@@ -74,5 +74,7 @@ if st.sidebar.button("Predict", type="primary"):
     test_df = [2, 1, 2, 1, 1, 1, 1, 1, 2, 3, 4, 1]
     survival_nmtlr = model_nmtlr.predict_survival(test_df)
     st.write(np.array(survival_nmtlr))
-    pd_data = pd.DataFrame(np.array(survival_nmtlr))
+    pd_data = pd.DataFrame(np.array(survival_nmtlr), index=['Survival']).T
+    st.session_state['display'] = True
+    plot_sur(pd_data)
     st.write(pd_data)

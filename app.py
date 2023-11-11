@@ -69,6 +69,6 @@ with st.sidebar:
 
 if st.sidebar.button("Predict", type="primary"):
     # test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
-    test_df = [AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]
+    test_df = [st.session_state[_] for _ in ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']]
     survival_nmtlr = model_nmtlr.predict_survival(test_df, t=12)
     st.write(np.array(survival_nmtlr))

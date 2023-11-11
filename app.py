@@ -5,6 +5,8 @@ from pysurvival.utils import load_model
 if 'model_deep' not in st.session_state:
     st.session_state["model_deep"] = load_model('DeepSurv.zip')
     st.session_state["model_nmtlr"] = load_model('NMTLR.zip')
+model_deep = st.session_state["model_deep"]
+model_nmtlr = st.session_state["model_nmtlr"]
 
 
 def get_select1():

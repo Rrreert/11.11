@@ -68,4 +68,6 @@ with st.sidebar:
             st.selectbox(_, get_select2()[_], index=None, key=_)
 
 if st.sidebar.button("Predict", type="primary"):
-    st.write(get_select1()["Age"].index(st.session_state["Age"]) + 1)
+    test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
+    survival_nmtlr = model_nmtlr.predict_survival(test_df, t=12)
+    st.write(np.array(survival_nmtlr))

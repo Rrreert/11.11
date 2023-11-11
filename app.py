@@ -75,3 +75,5 @@ if st.sidebar.button("Predict", type="primary"):
     survival_nmtlr = model_nmtlr.predict_survival(test_df)
     st.write(np.array(survival_nmtlr))
     st.write(model_nmtlr.predict_survival(test_df, t=12))
+    st.write(model_nmtlr.predict_survival(test_df, t=24))
+    st.write(model_nmtlr.predict_survival(test_df, t=36))

@@ -129,7 +129,7 @@ def plot_patients():
                 dict(
                     {
                         'Patients': [item['No']],
-                        'Model': st.session_state["model"]
+                        'Model': st.session_state["model"],
                         '1-Year': ["{:.2f}%".format(item['1-year'] * 100)],
                         '3-Year': ["{:.2f}%".format(item['3-year'] * 100)],
                         '5-Year': ["{:.2f}%".format(item['5-year'] * 100)]

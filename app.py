@@ -129,7 +129,7 @@ def plot_patients():
                 dict(
                     {
                         'Patients': [item['No']],
-                        'Model': st.session_state["model"],
+                        'Model': [item["use_model"]],
                         '1-Year': ["{:.2f}%".format(item['1-year'] * 100)],
                         '3-Year': ["{:.2f}%".format(item['3-year'] * 100)],
                         '5-Year': ["{:.2f}%".format(item['5-year'] * 100)]
@@ -169,6 +169,7 @@ def predict():
         'times': [i for i in range(1, len(survival) + 1)],
         'No': len(st.session_state['patients']) + 1,
         'arg': {key: st.session_state[key] for key in input_keys},
+        'use_model': st.session_state["model"],
         '1-year': model.predict_survival(test_df, t=12)[0],
         '3-year': model.predict_survival(test_df, t=36)[0],
         '5-year': model.predict_survival(test_df, t=60)[0],

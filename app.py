@@ -166,7 +166,7 @@ if st.sidebar.button("Predict", type="primary"):
     test_df = [2, 1, 2, 1, 1, 1, 1, 1, 2, 3, 4, 1]
     input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
                   'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
-    survival = model_nmtlr.predict_survival(test_df)
+    survival = model_nmtlr.predict_survival(test_df)[0]
     data = {
         'survival': survival,
         'times': [i for i in range(1, len(survival) + 1)],

@@ -92,6 +92,7 @@ def plot_below_header():
 
 
 def plot_survival():
+    st.write(st.session_state['patients'])
     pd_data = pd.concat(
         [
             pd.DataFrame(

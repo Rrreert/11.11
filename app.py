@@ -55,8 +55,8 @@ def plot_below_header():
         st.write('')
         st.write('')
         st.write('')
-        # st.session_state['display'] = ['Single', 'Multiple'].index(
-        #     st.radio("Display", ('Single', 'Multiple'), st.session_state['display']))
+        # st.session_state[''] = ['Single', 'Multiple'].index(
+        #     st.radio("", ('Single', 'Multiple'), st.session_state['']))
         st.session_state['display'] = ['Single', 'Multiple'].index(
             st.radio("Display", ('Single', 'Multiple'), st.session_state['display']))
         # st.radio("Model", ('DeepSurv', 'NMTLR','RSF','CoxPH'), 0,key='model',on_change=predict())
@@ -129,6 +129,7 @@ def plot_patients():
                 dict(
                     {
                         'Patients': [item['No']],
+                        'Model': st.session_state["model"]
                         '1-Year': ["{:.2f}%".format(item['1-year'] * 100)],
                         '3-Year': ["{:.2f}%".format(item['3-year'] * 100)],
                         '5-Year': ["{:.2f}%".format(item['5-year'] * 100)]

@@ -92,7 +92,6 @@ def plot_below_header():
 
 
 def plot_survival():
-    st.write(st.session_state['patients'])
     pd_data = pd.concat(
         [
             pd.DataFrame(
@@ -104,7 +103,6 @@ def plot_survival():
             ) for item in st.session_state['patients']
         ]
     )
-    # 画图
     if st.session_state['display']:
         fig = px.line(pd_data, x="Time", y="Survival", color='Patients', range_y=[0, 1])
     else:
@@ -120,7 +118,6 @@ def plot_survival():
             size=25
         )
     },
-        # 背景颜色设置
         plot_bgcolor="LightGrey",
         xaxis_title="Time, month",
         yaxis_title="Survival probability",
@@ -162,10 +159,10 @@ if st.session_state['patients']:
     plot_below_header()
 
 if st.sidebar.button("Predict", type="primary"):
-    # test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
-    test_df = [1, 1, 2, 4, 1, 1, 1, 1, 4, 3, 3, 2]
     input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
                   'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
+    all_dic = dict(get_select1(), **get_select2())
+    test_df = [all_dic[_].index(st.session_state[_]) for _ in input_keys]
     survival = model_nmtlr.predict_survival(test_df)[0]
     data = {
         'survival': survival,

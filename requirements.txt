@@ -1,5 +1,4 @@
+pyarrow==6.0.0
 streamlit==1.27.0
-scikit-learn
 pysurvival
 plotly
-pyarrow==6.0.0

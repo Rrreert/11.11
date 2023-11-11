@@ -1,6 +1,8 @@
 import streamlit as st
 import plotly.express as px
 from pysurvival.utils import load_model
+import pandas as pd
+import numpy as np
 
 if 'model_deep' not in st.session_state:
     st.session_state["model_deep"] = load_model('DeepSurv.zip')

@@ -163,7 +163,7 @@ if st.session_state['patients']:
 
 if st.sidebar.button("Predict", type="primary"):
     # test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
-    test_df = [1, 2, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1]
+    test_df = [1, 1, 2, 4, 1, 1, 1, 1, 4, 3, 3, 2]
     input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
                   'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
     survival = model_nmtlr.predict_survival(test_df)[0]

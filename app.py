@@ -7,11 +7,8 @@ import numpy as np
 st.set_page_config(layout="wide")
 
 if 'model_deep' not in st.session_state:
-    st.session_state["model_deep"] = load_model('DeepSurv.zip')
-    st.session_state["model_nmtlr"] = load_model('NMTLR.zip')
-model_deep = st.session_state["model_deep"]
-model_nmtlr = st.session_state["model_nmtlr"]
-
+    st.session_state["DeepSurv"] = load_model('DeepSurv.zip')
+    st.session_state["NMTLR"] = load_model('NMTLR.zip')
 
 
 if 'patients' not in st.session_state:
@@ -160,19 +157,20 @@ if st.session_state['patients']:
 
 
 def predict():
+    model = st.session_state[st.session_state["model"]]
     input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
                   'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
     all_dic = dict(get_select1(), **get_select2())
     test_df = [all_dic[_].index(st.session_state[_]) for _ in input_keys]
-    survival = model_nmtlr.predict_survival(test_df)[0]
+    survival = model.predict_survival(test_df)[0]
     data = {
         'survival': survival,
         'times': [i for i in range(1, len(survival) + 1)],
         'No': len(st.session_state['patients']) + 1,
         'arg': {key: st.session_state[key] for key in input_keys},
-        '1-year': model_nmtlr.predict_survival(test_df, t=12)[0],
-        '3-year': model_nmtlr.predict_survival(test_df, t=36)[0],
-        '5-year': model_nmtlr.predict_survival(test_df, t=60)[0],
+        '1-year': model.predict_survival(test_df, t=12)[0],
+        '3-year': model.predict_survival(test_df, t=36)[0],
+        '5-year': model.predict_survival(test_df, t=60)[0],
     }
     st.session_state['patients'].append(
         data
@@ -181,10 +179,10 @@ def predict():
 
 
 with st.sidebar:
-    col8, col9, col10 = st.columns([4, 4, 2])
-    with col10:
-        prediction = st.button(
-            'Predict',
-            type='primary',
-            on_click=predict,
-        )
+    st.selectbox("Please select model 👇", ["DeepSurv", "NMTLR"], key='model')
+    prediction = st.button(
+        'Predict',
+        type='primary',
+        on_click=predict,
+        use_container_width=True
+    )

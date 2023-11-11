@@ -1,3 +1,4 @@
 streamlit==1.27.0
 pysurvival
 plotly
+pyarrow==6.0.0

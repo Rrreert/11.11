@@ -4,11 +4,20 @@ from pysurvival.utils import load_model
 import pandas as pd
 import numpy as np
 
+st.set_page_config(layout="wide")
+
 if 'model_deep' not in st.session_state:
     st.session_state["model_deep"] = load_model('DeepSurv.zip')
     st.session_state["model_nmtlr"] = load_model('NMTLR.zip')
 model_deep = st.session_state["model_deep"]
 model_nmtlr = st.session_state["model_nmtlr"]
+
+
+
+if 'patients' not in st.session_state:
+    st.session_state['patients'] = []
+if 'display' not in st.session_state:
+    st.session_state['display'] = 1
 
 
 def get_select1():
@@ -37,9 +46,66 @@ def get_select2():
     return dic
 
 
-def plot_sur(pd_data):
+def plot_below_header():
+    col1, col2 = st.columns([1, 9])
+    col3, col4, col5, col6, col7 = st.columns([2, 2, 2, 2, 2])
+    with col1:
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
+        # st.session_state['display'] = ['Single', 'Multiple'].index(
+        #     st.radio("Display", ('Single', 'Multiple'), st.session_state['display']))
+        st.session_state['display'] = ['Single', 'Multiple'].index(
+            st.radio("Display", ('Single', 'Multiple'), st.session_state['display']))
+        # st.radio("Model", ('DeepSurv', 'NMTLR','RSF','CoxPH'), 0,key='model',on_change=predict())
+    with col2:
+        plot_survival()
+    with col4:
+        st.metric(
+            label='1-Year survival probability',
+            value="{:.2f}%".format(st.session_state['patients'][-1]['1-year'] * 100)
+        )
+    with col5:
+        st.metric(
+            label='3-Year survival probability',
+            value="{:.2f}%".format(st.session_state['patients'][-1]['3-year'] * 100)
+        )
+    with col6:
+        st.metric(
+            label='5-Year survival probability',
+            value="{:.2f}%".format(st.session_state['patients'][-1]['5-year'] * 100)
+        )
+    st.write('')
+    st.write('')
+    st.write('')
+    plot_patients()
+    st.write('')
+    st.write('')
+    st.write('')
+    st.write('')
+    st.write('')
+
+
+def plot_survival():
+    pd_data = pd.concat(
+        [
+            pd.DataFrame(
+                {
+                    'Survival': item['survival'],
+                    'Time': item['times'],
+                    'Patients': [item['No'] for i in item['times']]
+                }
+            ) for item in st.session_state['patients']
+        ]
+    )
+    # 画图
     if st.session_state['display']:
-        fig = px.line(pd_data, x=pd_data.index, y="Survival", range_y=[0, 1])
+        fig = px.line(pd_data, x="Time", y="Survival", color='Patients', range_y=[0, 1])
     else:
         fig = px.line(pd_data.loc[pd_data['Patients'] == pd_data['Patients'].to_list()[-1], :], x="Time", y="Survival",
                       range_y=[0, 1])
@@ -53,11 +119,31 @@ def plot_sur(pd_data):
             size=25
         )
     },
+        # 背景颜色设置
         plot_bgcolor="LightGrey",
         xaxis_title="Time, month",
         yaxis_title="Survival probability",
     )
     st.plotly_chart(fig, use_container_width=True)
+
+
+def plot_patients():
+    patients = pd.concat(
+        [
+            pd.DataFrame(
+                dict(
+                    {
+                        'Patients': [item['No']],
+                        '1-Year': ["{:.2f}%".format(item['1-year'] * 100)],
+                        '3-Year': ["{:.2f}%".format(item['3-year'] * 100)],
+                        '5-Year': ["{:.2f}%".format(item['5-year'] * 100)]
+                    },
+                    **item['arg']
+                )
+            ) for item in st.session_state['patients']
+        ]
+    ).reset_index(drop=True)
+    st.dataframe(patients)
 
 
 with st.sidebar:
@@ -69,12 +155,27 @@ with st.sidebar:
         for _ in get_select2():
             st.selectbox(_, get_select2()[_], index=None, key=_)
 
-if st.sidebar.button("Predict", type="primary"):
+st.header('DeepSurv for predicting cancer-specific survival of Osteosarcoma',
+          anchor='Cancer-specific survival of osteosarcoma')
+if st.session_state['patients']:
+    plot_below_header()
+
+if st.sidebar.button("Predict", type="primary", on_click=predict):
     # test_df = pd.DataFrame([AFP, Age, Chemotherapy, Grade, Histological_type, M, Marital_status, N, Race, Surgery, T, Tumor_size]).T
     test_df = [2, 1, 2, 1, 1, 1, 1, 1, 2, 3, 4, 1]
-    survival_nmtlr = model_nmtlr.predict_survival(test_df)
-    st.write(np.array(survival_nmtlr))
-    pd_data = pd.DataFrame(np.array(survival_nmtlr), index=['Survival']).T
-    st.session_state['display'] = True
-    plot_sur(pd_data)
-    st.write(pd_data)
+    input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
+                  'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
+    survival = model_nmtlr.predict_survival(test_df)
+    data = {
+        'survival': survival,
+        'times': [i for i in range(1, len(survival) + 1)],
+        'No': len(st.session_state['patients']) + 1,
+        'arg': {key: st.session_state[key] for key in input_keys},
+        '1-year': model_nmtlr.predict_survival(test_df, t=12),
+        '3-year': model_nmtlr.predict_survival(test_df, t=36),
+        '5-year': model_nmtlr.predict_survival(test_df, t=60),
+    }
+    st.session_state['patients'].append(
+        data
+    )
+    print('update patients ... ##########')

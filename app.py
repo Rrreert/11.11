@@ -158,7 +158,8 @@ st.header('DeepSurv for predicting cancer-specific survival of Osteosarcoma',
 if st.session_state['patients']:
     plot_below_header()
 
-if st.sidebar.button("Predict", type="primary"):
+
+def predict():
     input_keys = ['AFP', 'Age', 'Chemotherapy', 'Grade', 'Histological_type', 'M', 
                   'Marital_status', 'N', 'Race', 'Surgery', 'T', 'Tumor_size']
     all_dic = dict(get_select1(), **get_select2())
@@ -177,4 +178,13 @@ if st.sidebar.button("Predict", type="primary"):
         data
     )
     print('update patients ... ##########')
-    plot_below_header()
+
+
+with st.sidebar:
+    col8, col9, col10 = st.columns([4, 4, 2])
+        with col10:
+            prediction = st.form_submit_button(
+                'Predict',
+                type='primary',
+                on_click=predict,
+            )

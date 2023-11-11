@@ -39,7 +39,7 @@ def get_select2():
 
 def plot_sur(pd_data):
     if st.session_state['display']:
-        fig = px.line(pd_data, x=pd_data.index, y="Survival", color='Patients', range_y=[0, 1])
+        fig = px.line(pd_data, x=pd_data.index, y="Survival", range_y=[0, 1])
     else:
         fig = px.line(pd_data.loc[pd_data['Patients'] == pd_data['Patients'].to_list()[-1], :], x="Time", y="Survival",
                       range_y=[0, 1])

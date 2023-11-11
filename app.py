@@ -183,7 +183,7 @@ def predict():
 with st.sidebar:
     col8, col9, col10 = st.columns([4, 4, 2])
     with col10:
-        prediction = st.form_submit_button(
+        prediction = st.button(
             'Predict',
             type='primary',
             on_click=predict,

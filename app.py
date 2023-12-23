@@ -185,5 +185,5 @@ with st.sidebar:
         on_click=predict,
         use_container_width=True
     )
-st.header('{} for predicting cancer-specific survival of Osteosarcoma',
-          anchor='Cancer-specific survival of osteosarcoma'.format(st.session_state["model"]))
+st.header('{} for predicting cancer-specific survival of Osteosarcoma'.format(st.session_state["model"]),
+          anchor='Cancer-specific survival of osteosarcoma')

@@ -150,9 +150,6 @@ with st.sidebar:
     with col2:
         for _ in get_select2():
             st.selectbox(_, get_select2()[_], index=None, key=_)
-
-st.header('DeepSurv for predicting cancer-specific survival of Osteosarcoma',
-          anchor='Cancer-specific survival of osteosarcoma')
 if st.session_state['patients']:
     plot_below_header()
 
@@ -188,3 +185,5 @@ with st.sidebar:
         on_click=predict,
         use_container_width=True
     )
+st.header('{} for predicting cancer-specific survival of Osteosarcoma',
+          anchor='Cancer-specific survival of osteosarcoma'.format(st.session_state["model"]))
